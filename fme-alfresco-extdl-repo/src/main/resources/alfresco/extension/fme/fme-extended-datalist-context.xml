@@ -38,6 +38,7 @@
              <value>dl:event</value>
              <value>dl:location</value>
              <value>dl:meetingAgenda</value>
+             <value>ac:marknadsaktivitet</value>
          </set>
      </property>
   </bean>
@@ -49,6 +50,8 @@
   <bean id="datalistFormFilterType" class="de.fme.alfresco.repo.form.DataListFormFilter" parent="datalistBaseFormFilter">
   	<property name="filterRegistry" ref="typeFilterRegistry" />
   </bean>
+
+
   
     <!--                                        --> 
     <!--      Slingshot Data List REST API      --> 
@@ -67,6 +70,11 @@
         <property name="modelOrder"> 
            <!-- These are taken from the forms config for now --> 
            <map> 
+           	  
+              <entry key="ac:marknadsaktivitet"> 
+                <value>dl:itemId,ac:ma-produktion,ac:ma-typ,ac:ma-status,ac:ma-fardigdatum,ac:ma-vecka,ac:ma-ansvarig,dl:attachments,fm:forum</value> 
+              </entry> 
+              
               <entry key="dl:todoList"> 
                 <value>dl:itemId,dl:todoTitle,dl:todoDueDate,dl:todoPriority,dl:todoStatus,dl:todoNotes,dl:assignee,dl:attachments,fm:forum</value> 
               </entry> 
@@ -97,6 +105,7 @@
            </map> 
         </property> 
     </bean>
+      
     
     <bean id="datalistIDService" class="de.fme.alfresco.repo.datalist.DatalistIDServiceImpl">
 		<property name="nodeService" ref="NodeService" />
@@ -107,5 +116,10 @@
 		<property name="datalistIDService" ref="datalistIDService" />
 		<property name="nodeService" ref="NodeService" />
 	</bean>
+	
+	<bean id="datalistJsHelper" parent="baseJavaScriptExtension" class="se.redpill.alfresco.repo.jscript.DatalistJsHelper">
+        <property name="extensionName" value="datalistJsHelper" />
+    </bean>
+	
   
 </beans>

@@ -17,6 +17,7 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 var Filters =
 {
    /**
@@ -120,11 +121,8 @@ var Filters =
             break;
 
          case "createdByMe":
-            // Default limit to 50 documents - can be overridden using "max" argument
-            if (filterParams.limitResults === null)
-            {
-               filterParams.limitResults = 50;
-            }
+            
+            filterParams.limitResults = argMax;
 
             filterQuery = "+PARENT:\"" + parsedArgs.nodeRef;
             if (parsedArgs.nodeRef == "alfresco://sites/home")
@@ -137,7 +135,55 @@ var Filters =
             filterQuery += " -TYPE:\"folder\"";
             filterParams.query = filterQuery + filterQueryDefaults;
             break;
+        // Spirit custom filters
+         case "active":
+             filterParams.limitResults = argMax;
 
+             filterQuery = "+PARENT:\"" + parsedArgs.nodeRef;
+             if (parsedArgs.nodeRef == "alfresco://sites/home")
+             {
+                // Special case for "Sites home" pseudo-nodeRef
+                filterQuery += "/*/cm:dataLists";
+             }
+             filterQuery += "\"";
+             filterQuery += " -@ac\\:ma-status:\"" + "Ej utf\u00f6rd" + '"';
+             filterQuery += " -@ac\\:ma-status:\"" + "Klar" + '"';
+             filterQuery += " -TYPE:\"folder\"";
+             
+             filterParams.sort = [
+                  {
+                     column: "@ac:ma-fardigdatum",
+                     ascending: true
+                  }];
+
+             filterParams.query = filterQuery + filterQueryDefaults;
+             break;
+         case "assignedToMe":
+             filterParams.limitResults = argMax;
+
+             filterQuery = "+PARENT:\"" + parsedArgs.nodeRef;
+             if (parsedArgs.nodeRef == "alfresco://sites/home")
+             {
+                // Special case for "Sites home" pseudo-nodeRef
+                filterQuery += "/*/cm:dataLists";
+             }
+             filterQuery += "\"";
+             
+             // since this is an association we need to filter out the 
+             // parts of the list we are not interested in later on
+             var personResurs = "defaultNoActivities";
+             
+             if (person.sourceAssocs["ac:systemAnvandare"] != null){
+            	 personResurs = person.sourceAssocs["ac:systemAnvandare"][0];
+             }
+             
+             filterParams.ansvarig = personResurs;
+             
+             filterQuery += " -TYPE:\"folder\"";
+             filterParams.query = filterQuery + filterQueryDefaults;
+             
+             break;
+         // End Spirit custom filters
          case "node":
             filterParams.query = "+ID:\"" + parsedArgs.nodeRef + "\"";
             break;
@@ -153,8 +199,8 @@ var Filters =
 
          case "filterform":
          	//we have a filter form!
-        	  	var filterData = filter.filterData;
-        	  	
+        	 var filterData = filter.filterData;
+        	  
              filterQuery = "+PARENT:\"" + parsedArgs.nodeRef;
              if (parsedArgs.nodeRef == "alfresco://sites/home")
              {
@@ -162,52 +208,96 @@ var Filters =
                 filterQuery += "/*/cm:dataLists";
              }
              filterQuery += "\"";
-             filterQuery += " -TYPE:\"folder\"";
-             
+             filterQuery += " -TYPE:\"folder\""; 
+             var associationer = new Array();
+             var i = 0;
              var fieldNamesIterator = filterData.getFieldNames().iterator();
+             var sortOnFardigdatum = "false";
+                 
              for ( ; fieldNamesIterator.hasNext(); ){
              	var fieldName = fieldNamesIterator.next();
+             	
+             	
              	if (filterData.getFieldData(fieldName).getValue()!= ""){
- 	            	var luceneFieldName = fieldName.replace("prop_","").replace("_","\\:");
- 	            	var value = new String(filterData.getFieldData(fieldName).getValue());
- 	            	if (luceneFieldName.indexOf("-date-range") > 0){
- 	            		luceneFieldName = luceneFieldName.replace("-date-range","");
-             			var dates = value.split("TO");
-             			if (dates[0] == ""){
-             				filterQuery += " +@"+ luceneFieldName +":[MIN TO " + dates[1] +']';
-             			}
-             			else if (dates[1] == ""){
-             				filterQuery += " +@"+ luceneFieldName +":[" + dates[0]+ " TO MAX]";
-             			}else{
-             				filterQuery += " +@"+ luceneFieldName +":[" +  dates[0] + " TO " + dates[1] +']';
-             			}
- 	            		
- 	            	}
- 	            	else if (luceneFieldName.indexOf("Priority") > 0 || luceneFieldName.indexOf("Status") > 0){
-             			var values = value.split(",");
-             			if (values.length > 1){
-             				filterQuery += " +(";
-             				for (var i = 0; i < values.length;i++){
-             					if (i > 0){
-             						filterQuery += " OR ";
-             					}
-             					filterQuery += " @"+ luceneFieldName +":\"" +  values[i] + '"';
-                 			}
-             				filterQuery += ") ";
-             			}else{
-             				filterQuery += " +@"+ luceneFieldName +":\"" +  value + '"';
-             			}
- 	            	}
- 	            	else{
- 	            		filterQuery += " +@"+ luceneFieldName +":\"*" +  value + '*"';
- 	            	}
- 	            	
+            		// Only query properties, save associations for second filtering in data.post.json.js
+             		if (fieldName.substring(0, "assoc".length)=="assoc"){
+             			var assocName = fieldName.replace("assoc_","");
+             			var value = new String(filterData.getFieldData(fieldName).getValue());
+             			var association = new Object();
+             			association.name=assocName;
+             			association.value=value;
+             			associationer.push(association);
+             			i++;
+             		}else {
+
+	 	            	var luceneFieldName = fieldName.replace("prop_","").replace("_","\\:");
+	 	            	var value = new String(filterData.getFieldData(fieldName).getValue());
+	 	            	if (luceneFieldName.indexOf("-date-range") > 0){
+	 	            		luceneFieldName = luceneFieldName.replace("-date-range","");
+	             			var dates = value.split("TO");
+	             			if (dates[0] == ""){
+	             				filterQuery += " +@"+ luceneFieldName +":[MIN TO " + dates[1] +']';
+	             			}
+	             			else if (dates[1] == ""){
+	             				filterQuery += " +@"+ luceneFieldName +":[" + dates[0]+ " TO MAX]";
+	             			}else{
+	             				filterQuery += " +@"+ luceneFieldName +":[" +  dates[0] + " TO " + dates[1] +']';
+	             			}
+	 	            		
+	 	            	}
+	 	            	else if (luceneFieldName.indexOf("Priority") > 0 || luceneFieldName.indexOf("Status") > 0|| luceneFieldName.indexOf("ma-typ") > 0|| luceneFieldName.indexOf("ma-status") > 0){
+	             			var values = value.split(",");
+	             			if (values.length > 1){
+	             				filterQuery += " +(";
+	             				for (var i = 0; i < values.length;i++){
+	             					if (i > 0){
+	             						filterQuery += " OR ";
+	             					}
+	             					filterQuery += " @"+ luceneFieldName +":\"" +  values[i] + '"';
+	                 			}
+	             				filterQuery += ") ";
+	             			}else{
+	             				filterQuery += " +@"+ luceneFieldName +":\"" +  value + '"';
+	             			}
+	 	            	}
+	 	      			else if (luceneFieldName.indexOf("ma-vecka") > 0 ){
+	 	      				filterQuery += " +@"+ luceneFieldName +":" +  value;
+	 	      			}
+	 	            	else{
+	 	            		filterQuery += " +@"+ luceneFieldName +":\"*" +  value + '*"';
+	 	            	}
+	 	            	// Always sort descending on ma-fardigdatum if existent.
+	 	            	if (luceneFieldName.indexOf("ma-fardigdatum") > 0){
+	 	            		sortOnFardigdatum = "true";
+  
+	 	            	}
+	 	            	
+             		}
+             		  filterParams.sort = [
+                  		    {
+                     			column: "@ac:ma-fardigdatum",
+                     			ascending: true
+                  			}];
+             		
              	}
              }
-            
              
+             
+             
+             filterParams.sortOnFardigDatum = sortOnFardigdatum;
+             
+             // merge the associations added and removed with the autocomplete picker (we need a netto list)
+             // Doing this in java (DatalistJsHelper.java)
+             if (associationer != "undefined" && associationer.length > 0){
+	             var nettoAssocs = datalistJsHelper.mergeAssociations(jsonUtils.toJSONString(associationer));
+	             if (nettoAssocs != null){
+	            	 nettoAssocs = "[" + nettoAssocs + "]";
+	            	 var obj = eval ("(" + nettoAssocs + ")");
+	            	 filterParams.assocs = obj;
+	             }
+      		 }
+            	
              filterParams.query = filterQuery + filterQueryDefaults;	
-        	  	
         	  	
          	 break;
 

@@ -1,0 +1,18 @@
+<!-- <extension>
+	<modules>
+		<module>   
+			<id>Overridden form includes</id>
+			<customizations>
+				<customization>
+					<targetPackageRoot>org.alfresco.components.documentlibrary
+					</targetPackageRoot>
+					<sourcePackageRoot>de.fme.alfresco.components.documentlibrary</sourcePackageRoot>
+					<dependencies>
+						<js>/res/components/form/extended-form.js</js>
+					</dependencies>
+				</customization>
+			</customizations>
+			<auto-deploy>true</auto-deploy>
+		</module>
+	</modules>
+</extension> -->

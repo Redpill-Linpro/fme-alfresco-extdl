@@ -588,6 +588,19 @@
                              	var dateEntry = Alfresco.util.fromISO8601(control.currentToDate).toString(control.msg("form.control.date-picker.entry.date.format"));
                              	Dom.get(control.id + "-date-to").value = dateEntry;
                             }
+                    	// Insert code for autocomplete control to work
+                    	}else if (element.name.substring(0, "assoc".length)=== "assoc"){
+                    		element.value=filterData[name];
+                    		var autocompleteElement = Dom.get(element.id);
+                    		values = filterData[name].split(",");
+                           
+                    		for (var i = 0, length = values.length; i < length; i++) {
+                    		    var chunk = values[i];
+                    		   // alert(chunk);
+                    		}
+                    		
+                    		element.value=filterData[name];
+                            
                     		
                     	}else if (element.type == "hidden" && filterData[name].split(",").length > 0)
                         {

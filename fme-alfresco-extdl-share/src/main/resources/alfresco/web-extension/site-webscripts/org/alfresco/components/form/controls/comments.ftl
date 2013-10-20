@@ -1,7 +1,7 @@
 <#include "common/editorparams.inc.ftl" />
-<#if (context.properties.nodeRef?? && context.properties.nodeRef?js_string?starts_with("workspace://SpacesStore")) 
+<#--<#if (context.properties.nodeRef?? && context.properties.nodeRef?js_string?starts_with("workspace://SpacesStore")) 
 || ((form.mode == "edit" || form.mode == "view") && args.itemId?? && args.itemId?js_string?starts_with("workspace://SpacesStore"))>
-
+-->
 <div class="form-field">
 
    <#if form.mode == "view">
@@ -79,4 +79,4 @@
 			   <div id="${fieldHtmlId}-list-comments"></div>
 			</div>
 </div>
-</#if> 
+<#--</#if>--> 

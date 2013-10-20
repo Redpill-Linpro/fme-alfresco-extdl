@@ -130,7 +130,7 @@ function getData()
       allNodes = [], node,
       items = [];
 
-   if (filter == null || filter.filterId == "all")
+   if (args.itemType==null && (filter == null || filter.filterId == "all"))
    {
       // Use non-query method
       var parentNode = parsedArgs.listNode;
@@ -142,7 +142,7 @@ function getData()
    }
    else
    {
-	  // XPath for solr systems
+/*	  // XPath for solr systems
 	  var n = search.findNode(parsedArgs.nodeRef);
 	  var q = xPathFilterQuery(filter.filterData);
 	  // logger.log(parsedArgs.nodeRef + " -> *" + q.propQuery);
@@ -151,8 +151,8 @@ function getData()
 	  for (var i=0; i<q.rangeFilters.length; i++) {
 		  res = filterRange(res, q.rangeFilters[i]);
 	  }
-	  allNodes = res;
-	  /*
+	  allNodes = res;*/
+	  
       var filterParams = Filters.getFilterParams(filter, parsedArgs)
          query = filterParams.query;
       // Query the nodes - passing in default sort and result limit parameters
@@ -171,21 +171,99 @@ function getData()
             namespace: (filterParams.namespace ? filterParams.namespace : null)
          });
       }
-      */
-   }
+      // Do second filtering (associations) which cannot be targeted in query
+      // First find the personresurs for the logged in user
+      if (allNodes != "undefined"){
+	      if (allNodes.length > 0 && filterParams.ansvarig != null)
+	      {
+	    	  var allFilteredNodes = [];
+	    	  for (var i = 0 ; i < allNodes.length; i++)
+	    	  {
+	    		  logger.debug("all nodes");
+	    		  if(allNodes[i].assocs["ac:ma-ansvarig"] != null)
+	    		  {
+	    			  var ansvariga = allNodes[i].assocs["ac:ma-ansvarig"];
+	    			  
+	    			  for (ansvarig in allNodes[i].assocs["ac:ma-ansvarig"]){
+	    				  logger.debug("ansvarig: "+ansvarig.name)
+	    				  if (ansvarig.name == filterParams.ansvarig.name) {
+	    						allFilteredNodes.push(allNodes[i]);
+	    				  }
+	    			  }
+	    		  }
+	    	  }
+	    	  allNodes = allFilteredNodes;
+	      }
+	      
+	      var filterAssociations = filterParams.assocs;
+      
+          // Do we have any associations to filter against in our custom filter?
+	      if (filterAssociations != undefined && filterAssociations.length > 0){
+	    	  filterAssociations = filterAssociations[0];
+	    	  var allFilteredNodes = [];
+	    	  // For every node in our original search result
+	    	   for (var i = 0; i < allNodes.length; i++){
+	    	      var resultArray = new Array();
+	    	      for (var filterAssocName in filterAssociations){
+	    	      	  if(filterAssociations.hasOwnProperty(filterAssocName)){
+	    	      		  var filterAssocOrigName = filterAssocName.replace("_", ":");
+	    	      		  
+	    	      		  // Does the node in the search result have any associations of the type in the filter
+	    	       		  var associationer = allNodes[i].assocs[filterAssocOrigName];
+	    	      		  if (associationer != null){
+	    	      			  var assocTypeArray = new Array();
+	    	      			  for (var j=0; j < associationer.length; j++){
+	    	      				  for(var value in filterAssociations[filterAssocName]){
+	    	      					  if (filterAssociations[filterAssocName][value] == associationer[j].nodeRef){
+	    	      						  assocTypeArray.push("true");
+	    	      					  }else {
+	    	      						  assocTypeArray.push("false");
+	    	      					  }
+	    	      				  }
+	    	      				  if (assocTypeArray.length > 0){
+	    	      					  resultArray.push(assocTypeArray);
+	    	      				  }
+	    	      			  }
+	    	      		  }
+	    	      	  }
+	    	        
+	    	      	  var noOfHits = 0;
+	    	      	  for (var x=0; x<resultArray.length;x++){
+	    	      	    for (var z=0; z< resultArray[x].length; z++){
+	    	      	      if (resultArray[x][z] == "true"){
+	    	      	        noOfHits++;
+	    	      	        break;
+	    	      	      }
+	    	      	    }  
+	    	      	  }
+	    	      }	
+	    	      if (filterAssociations != undefined && noOfHits > 0){
+			      	  if (noOfHits >= resultArray.length){
+				        allFilteredNodes.push(allNodes[i]);
+				      }
+	    	      }
 
-   if (allNodes.length > 0)
-   {
-      for each (node in allNodes)
-      {
-         try
-         {
-             items.push(Evaluator.run(node, fields));
-         }
-         catch(e) {}
+	    	   }
+	    		   
+	    	  allNodes = allFilteredNodes;
+	      }
+	     
+
       }
    }
-
+   if (allNodes != "undefined"){
+	   if (allNodes.length > 0)
+	   {
+	      for each (node in allNodes)
+	      {
+	         try
+	         {
+	             items.push(Evaluator.run(node, fields));
+	         }
+	         catch(e) {}
+	      }
+	   }
+   }
    return (
    {
       fields: fields,
