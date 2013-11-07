@@ -46,7 +46,7 @@
     <module>fme-alfresco-extdl-share</module>
   </modules>
   <properties>
-    <alfresco.version>4.2.c</alfresco.version>
+    <alfresco.version>4.2.e</alfresco.version>
     <spring.version>3.0.6.RELEASE</spring.version>
     <spring.surf.version>1.2.0-SNAPSHOT</spring.surf.version>
   </properties>

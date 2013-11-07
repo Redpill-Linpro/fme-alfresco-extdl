@@ -158,13 +158,38 @@
                         	   html+= scope.msg("datalist.comments.count", data.displayValue);
                         	   break;
                            default:
-                        	  if ($html(data.displayValue.length) > 40){
+                        	   if (datalistColumn.type == "association")
+                               {
+                                  var valueToShow = "";
+                                  if (data.displayValue.indexOf('{')!=-1){
+                               	   valueToShow = data.displayValue.substring(0, data.displayValue.indexOf('{'));
+                                  }else {
+                               	   valueToShow = data.displayValue;
+                                  }
+                                  
+                                  if (datalistColumn.dataType.toLowerCase()=="ac:produktion" )
+                                  { 
+                               	   // No hyperlink for those...
+                               	   html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/produktion.ico' + '" width="16" alt="' + $html(valueToShow) + '" title="' + $html(valueToShow) + '" />';
+                               	   html += $html(valueToShow)+ '<br />';
+                                  }else if (datalistColumn.dataType.toLowerCase()=="ac:person")
+                                  {
+                               	   // No hyperlink for those...
+                               	   html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/filetypes/generic-user-16.png' + '" width="16" alt="' + $html(valueToShow) + '" title="' + $html(valueToShow) + '" />';
+                               	   html += $html(valueToShow);
+                                  }else 
+                                  {
+                                      html += '<a href="' + Alfresco.util.siteURL((data.metadata == "container" ? 'folder' : 'document') + '-details?nodeRef=' + data.value) + '">';
+                                      html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/filetypes/' + Alfresco.util.getFileIcon(data.displayValue, (data.metadata == "container" ? 'cm:folder' : null), 16) + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                      html += ' ' + $html(valueToShow) + '</a>'
+                                  }
+                              }/*else if ($html(data.displayValue.length) > 40){
                         		  html += $html(data.displayValue.substring(0,40) + '...');
                         		  var domid = Alfresco.util.generateDomId(elCell);
                         		  new YAHOO.widget.Tooltip(domid +"tooltip",  
                         				  { context:elCell,  
                         				  text:  $html(data.displayValue)});
-                        	  }else{
+                        	  }*/else{
                         		  html += $html(data.displayValue);  
                         	  }
                               
