@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.fme</groupId>
+  <groupId>se.capio.stg.alfresco</groupId>
   <artifactId>fme-alfresco-extdl-share</artifactId>
   <parent>
     <artifactId>fme-alfresco-extdl-parent</artifactId>
-    <groupId>de.fme</groupId>
+    <groupId>se.capio.stg.alfresco</groupId>
     <version>1.1</version>
   </parent>
   <version>1.2</version>
