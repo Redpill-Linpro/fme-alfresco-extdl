@@ -29,7 +29,7 @@
 <#elseif form?exists>
 
   <div> 
-   <div id="${formId}-container" class="form-container columns-form-container bd">
+   <div id="${formId}-container" class="form-container columns-form-container bd view-form">
     
       <#if form.showCaption?exists && form.showCaption>
          <div id="${formId}-caption" class="caption"><span class="mandatory-indicator">*</span>${msg("form.required.fields")}</div>
@@ -53,10 +53,12 @@
         </div>
       </div>
             
+<#-- To be able to comment on a view form...
       <#if form.mode != "view">
          <@formLib.renderFormButtons formId=formId />
          </form>
       </#if>
+-->
    </div>
  </div>
 </#if>

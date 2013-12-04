@@ -1,4 +1,4 @@
-<import resource="classpath:alfresco/templates/webscripts/org/alfresco/slingshot/datalists/evaluator.lib.js">
+<import resource="classpath:/alfresco/extension/templates/webscripts/org/alfresco/slingshot/datalists/deviations-evaluator.lib.js">
 <import resource="classpath:alfresco/extension/templates/webscripts/org/alfresco/slingshot/datalists/filters.lib.js">
 <import resource="classpath:alfresco/extension/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
 
@@ -36,65 +36,6 @@ function escape(value) {
 	*/
 }
 
-function filterRange(array, range) {
-	logger.log("Applying " + range.prop + " range filter " + range.min + " <= x <= " + range.max);
-	var filtered = [];
-	for (var i=0; i<array.length; i++) {
-		obj = array[i];
-		logger.log(obj.properties[range.prop]);
-		var minOk = !range.min || (obj.properties[range.prop] && (range.min.getTime() <= obj.properties[range.prop].getTime()));
-		var maxOk = !range.max || (obj.properties[range.prop] && (obj.properties[range.prop].getTime() <= range.max.getTime()));
-		if (minOk && maxOk) {
-			filtered.push(obj);
-		}
-	}
-	
-	return filtered;
-}
-
-function xPathFilterQuery(filterData) {
-	var rangeFilters = [];
-	var fieldQuery = [];
-	var fieldNamesIterator = filterData.getFieldNames().iterator();
-	for ( ; fieldNamesIterator.hasNext(); ){
-		var fieldName = fieldNamesIterator.next();
-		if (filterData.getFieldData(fieldName).getValue()!= ""){
-			var propName = fieldName.replace("prop_","").replace("_",":");
-	    	var value = new String(filterData.getFieldData(fieldName).getValue());
-	    	if (propName.indexOf("-date-range") > 0){
-	    		propName = propName.replace("-date-range","");
-	    		rf = { prop: propName };
-				var dates = value.split("TO");
-				if (dates[0] == ""){
-					rf.max =  utils.fromISO8601(dates[1]);
-				}
-				else if (dates[1] == ""){
-					rf.min = utils.fromISO8601(dates[0]);
-				}else{
-					rf.min =  utils.fromISO8601(dates[0]);
-					rf.max = utils.fromISO8601(dates[1]);
-				}
-	    		rangeFilters.push(rf);
-	    	}
-	    	else if (propName.indexOf("Priority") > 0 || propName.indexOf("Status") > 0){
-				var values = value.split(",");
-				var escaped = [];
-				for (var i=0;i<values.length;i++) {
-					escaped.push('"' + escape(values[i]) + '"');
-				}
-				fieldQuery.push('(@' + propName + '=' + escaped.join(' or @' + propName + '=') + ')');
-	    	} 
-	    	else{
-	    		fieldQuery.push("(like(@" + propName + ',"*' + escape(value) + '*"))');
-	    	}
-	    	
-		}
-	}
-	return {
-		rangeFilters : rangeFilters,
-		propQuery : "[" + fieldQuery.join(" and ") + "]" 
-	}
-}
 
 /**
  * Main entry point: Return data list with properties being supplied in POSTed arguments
@@ -142,17 +83,8 @@ function getData()
    }
    else
    {
-	  // XPath for solr systems
-	  var n = search.findNode(parsedArgs.nodeRef);
-	  var q = xPathFilterQuery(filter.filterData);
-	  // logger.log(parsedArgs.nodeRef + " -> *" + q.propQuery);
-	  var res = n.childrenByXPath("* " + q.propQuery);
-	  logger.log("Got " + res.length + " results, " + q.rangeFilters.length + " range filters");
-	  for (var i=0; i<q.rangeFilters.length; i++) {
-		  res = filterRange(res, q.rangeFilters[i]);
-	  }
-	  allNodes = res;
-	  /*
+
+	  
       var filterParams = Filters.getFilterParams(filter, parsedArgs)
          query = filterParams.query;
       // Query the nodes - passing in default sort and result limit parameters
@@ -171,7 +103,7 @@ function getData()
             namespace: (filterParams.namespace ? filterParams.namespace : null)
          });
       }
-      */
+      
    }
 
    if (allNodes.length > 0)

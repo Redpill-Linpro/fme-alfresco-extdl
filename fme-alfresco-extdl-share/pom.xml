@@ -5,10 +5,9 @@
   <artifactId>fme-alfresco-extdl-share</artifactId>
   <parent>
     <artifactId>fme-alfresco-extdl-parent</artifactId>
-    <version>pre-4.2</version>
+    <version>pre-4.2-SNAPSHOT</version>
     <groupId>de.fme</groupId>
   </parent>
-  <version>pre-4.2</version>
   <packaging>jar</packaging>
   <name>fme Alfresco Extended Datalists Share</name>
   <url>http://maven.apache.org</url>

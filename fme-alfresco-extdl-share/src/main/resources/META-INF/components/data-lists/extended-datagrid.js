@@ -158,18 +158,23 @@
                         	   html+= scope.msg("datalist.comments.count", data.displayValue);
                         	   break;
                            default:
-                        	  if ($html(data.displayValue.length) > 40){
-                        		  html += $html(data.displayValue.substring(0,40) + '...');
-                        		  var domid = Alfresco.util.generateDomId(elCell);
-                        		  new YAHOO.widget.Tooltip(domid +"tooltip",  
-                        				  { context:elCell,  
-                        				  text:  $html(data.displayValue)});
-                        	  }else{
-                        		  html += $html(data.displayValue);  
-                        	  }
-                              
-                              break;
-                        }
+                         	  if ($html(data.displayValue.length) > 40){
+                         		  html += $html(data.displayValue.substring(0,40) + '...');
+                         		  var domid = Alfresco.util.generateDomId(elCell);
+                         		  new YAHOO.widget.Tooltip(domid +"tooltip",  
+                         				  { context:elCell,  
+                         				  text:  $html(data.displayValue)});
+                         	  }else{
+                         		  if (datalistColumn.formsName == 'prop_rpdl_patientPersonalNumber'){
+                         			  html += $html(Alfresco.util.message("rpdl.patientPersonalNumberExists"));
+                         		  }else {
+                         			  html += $html(data.displayValue);  
+                         		  }
+                         		    
+                         	  }
+                               
+                               break;
+                         }
 
                         if (i < ii - 1 && i <= 1)
                         {
@@ -430,12 +435,12 @@
             Bubbling.fire("selectedItemsChanged");
          }, this, true);
 
-         this.widgets.dataTable.on('rowDblclickEvent',function(aArgs) {
+/*         this.widgets.dataTable.on('rowDblclickEvent',function(aArgs) {
              var theTarget = aArgs.target;
              var theRecord = this.getRecord(theTarget);
              
              me.onActionView(theRecord.getData());
-        });
+        });*/
          // Rendering complete event handler
          this.widgets.dataTable.subscribe("renderEvent", function()
          {
@@ -663,10 +668,10 @@
     		 target = event.target ? event.target : event.srcElement;
     		 
     		 var targetId = target.id;
-    		 if (!(targetId.contains(me.id) && targetId.contains("-extDgFilterForm")))
-    		 {
-    		 	 //this is not from filterForm
-    		 	 return false;
+		 
+    		 if (!(targetId.indexOf(me.id) && targetId.indexOf("-extDgFilterForm"))){
+    			 //this is not from filterForm
+    			 return false;
     		 }
     		 
     		 if (target.tagName == "TEXTAREA")

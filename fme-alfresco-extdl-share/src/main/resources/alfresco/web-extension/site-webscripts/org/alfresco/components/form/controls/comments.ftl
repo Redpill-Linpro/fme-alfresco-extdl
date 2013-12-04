@@ -1,7 +1,7 @@
 <#include "common/editorparams.inc.ftl" />
 <#if ((form.mode == "edit" || form.mode == "view") && args.itemId??)>
 <div class="form-field">
-   <#if form.mode == "edit">
+   <#if form.mode == "edit" || form.mode == "view">
       <label for="${fieldHtmlId}">${msg("form.label.comment.add")}</label>
       <textarea id="${fieldHtmlId}" name="${field.name}" rows="${rows}" cols="${columns}" tabindex="0"
         <#if field.description??>title="${field.description}"</#if>
