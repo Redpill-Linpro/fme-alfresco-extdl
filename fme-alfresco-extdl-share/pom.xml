@@ -5,7 +5,7 @@
   <artifactId>fme-alfresco-extdl-share</artifactId>
   <parent>
     <artifactId>fme-alfresco-extdl-parent</artifactId>
-    <version>pre-4.2-SNAPSHOT</version>
+    <version>pre-4.2-deviations-SNAPSHOT</version>
     <groupId>de.fme</groupId>
   </parent>
   <packaging>jar</packaging>

@@ -27,13 +27,13 @@ const REQUEST_MAX = 1000;
 // var ESCAPES = [[/&/g, "&amp;"], [/</g, "&lt;"], [/>/g, "&gt;"], [/"/g, "&quot;"]]
 
 function escape(value) {
-	return value.replace('"','');
-	/*
-	var escaped = value;
-	for(var item in ESCAPES)
-	    escaped = escaped.replace(ESCAPES[item][0], ESCAPES[item][1]);
-	return escaped;
-	*/
+   return value.replace('"','');
+   /*
+   var escaped = value;
+   for(var item in ESCAPES)
+       escaped = escaped.replace(ESCAPES[item][0], ESCAPES[item][1]);
+   return escaped;
+   */
 }
 
 
@@ -84,7 +84,7 @@ function getData()
    else
    {
 
-	  
+     
       var filterParams = Filters.getFilterParams(filter, parsedArgs)
          query = filterParams.query;
       // Query the nodes - passing in default sort and result limit parameters
@@ -112,7 +112,17 @@ function getData()
       {
          try
          {
-             items.push(Evaluator.run(node, fields));
+            var evaledNode = Evaluator.run(node, fields);
+            nodeChildren = node.children;
+            extraInfo = null;
+            if (nodeChildren.length > 0) {
+               for each (procNode in nodeChildren) {
+                  if (procNode.type.indexOf("deviationProcessorNode", 0) != -1) {
+                     evaledNode.extraInfo = procNode;
+                  }
+               }
+            }
+            items.push(evaledNode);
          }
          catch(e) {}
       }

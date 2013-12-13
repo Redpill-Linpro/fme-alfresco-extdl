@@ -6,7 +6,7 @@
 	<artifactId>fme-alfresco-extdl-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>[parent] fme Alfresco Extended Datalists</name>
-	<version>pre-4.2-SNAPSHOT</version>
+	<version>pre-4.2-deviations-SNAPSHOT</version>
 	<description>
         Parent project for fme Alfresco Extended Datalists
     </description>
@@ -46,6 +46,7 @@
 	</modules>
 	<properties>
 		<alfresco.version>4.2.c</alfresco.version>
+		<alfresco.groupId>org.alfresco</alfresco.groupId>
 		<spring.version>3.0.6.RELEASE</spring.version>
 		<spring.surf.version>1.2.0-SNAPSHOT</spring.surf.version>
 	</properties>
@@ -79,7 +80,7 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.alfresco</groupId>
+			<groupId>${alfresco.groupId}</groupId>
 			<artifactId>alfresco-core</artifactId>
 			<version>${alfresco.version}</version>
 			<scope>provided</scope>
@@ -97,13 +98,13 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.alfresco</groupId>
+			<groupId>${alfresco.groupId}</groupId>
 			<artifactId>alfresco-repository</artifactId>
 			<version>${alfresco.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.alfresco</groupId>
+			<groupId>${alfresco.groupId}</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 			<version>${alfresco.version}</version>
 			<scope>provided</scope>
@@ -130,6 +131,14 @@
 						<archive>
 							<addMavenDescriptor>false</addMavenDescriptor>
 						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
 					</configuration>
 				</plugin>
 			</plugins>
