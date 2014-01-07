@@ -11,7 +11,7 @@
 </bean>	
     
   <!-- Datalist Policy -->
-  <bean id="DataListItemPolicies" class="de.fme.alfresco.repo.policy.DataListItemPolicies"
+<!--    <bean id="DataListItemPolicies" class="de.fme.alfresco.repo.policy.DataListItemPolicies"
     init-method="init">
     <property name="policyComponent" ref="policyComponent"/>
     <property name="nodeService" ref="nodeService" />
@@ -19,7 +19,7 @@
     <property name="versionService" ref="versionService" />
     <property name="datalistIDService" ref="datalistIDService" />
   </bean>
-  
+   -->
   <bean id="datalistBaseFormFilter" abstract="true" parent="baseFormFilter">
      <property name="namespacePrefixResolver">
           <ref bean="namespaceService" />
@@ -38,6 +38,7 @@
              <value>dl:event</value>
              <value>dl:location</value>
              <value>dl:meetingAgenda</value>
+             <value>rpdl:deviationProcessorNode</value>
          </set>
      </property>
   </bean>

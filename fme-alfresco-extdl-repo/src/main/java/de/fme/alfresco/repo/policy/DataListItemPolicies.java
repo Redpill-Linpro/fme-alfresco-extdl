@@ -79,7 +79,8 @@ public class DataListItemPolicies implements OnCreateVersionPolicy, OnCreateAsso
 
     public void init() {
         
-        this.onCreateVersionBehaviour = new JavaBehaviour(this, ON_CREATE_VERSION_POLICY_QNAME.getLocalName(),
+      // We do not need (or want) the version behaviour, comment it out
+        /*this.onCreateVersionBehaviour = new JavaBehaviour(this, ON_CREATE_VERSION_POLICY_QNAME.getLocalName(),
                 NotificationFrequency.FIRST_EVENT);
         policyComponent.bindClassBehaviour(ON_CREATE_VERSION_POLICY_QNAME, QName.createQName(
                 "http://www.alfresco.org/model/datalist/1.0", "dataListItem"), this.onCreateVersionBehaviour);
@@ -109,7 +110,7 @@ public class DataListItemPolicies implements OnCreateVersionPolicy, OnCreateAsso
                 ContentModel.ASSOC_ATTACHMENTS, this.onDeleteAssociationBehaviour);
         policyComponent.bindAssociationBehaviour(OnDeleteAssociationPolicy.QNAME, TYPE_DATA_LIST_ITEM,
                 ASSOC_DL_ATTACHMENTS, this.onDeleteAssociationBehaviour);
-        
+        */
         this.onCreateNodePolicy = new JavaBehaviour(this, OnCreateNodePolicy.QNAME.getLocalName(),
                 NotificationFrequency.FIRST_EVENT);
         policyComponent.bindClassBehaviour(OnCreateNodePolicy.QNAME, QName.createQName(

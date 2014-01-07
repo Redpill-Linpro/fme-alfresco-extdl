@@ -167,6 +167,11 @@
                          	  }else{
                          		  if (datalistColumn.formsName == 'prop_rpdl_patientPersonalNumber'){
                          			  html += $html(Alfresco.util.message("rpdl.patientPersonalNumberExists"));
+                         		  }else if (datalistColumn.formsName == 'prop_rpdl_classified'){
+                         			  // Indicate classified nodes with padlock icon.
+                         			  if (data.value==true){
+                         				  html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/padlock.gif" width="16" title="' + Alfresco.util.message("rpdl.classfiedDeviation") + '" />';
+                         			  }
                          		  }else {
                          			  html += $html(data.displayValue);  
                          		  }
@@ -355,10 +360,16 @@
          for (var i = 0, ii = this.datalistColumns.length; i < ii; i++)
          {
             column = this.datalistColumns[i];
+            
+            // The classified column indicator does not need a header
+            var label = column.label;
+            if (column.formsName == "prop_rpdl_classified"){
+            	label = "";
+            }
             columnDefinitions.push(
             {
                key: this.dataResponseFields[i],
-               label: column.label,
+               label: label,
                sortable: true,
                sortOptions:
                {
