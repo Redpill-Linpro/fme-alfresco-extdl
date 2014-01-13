@@ -20,6 +20,8 @@
     <property name="datalistIDService" ref="datalistIDService" />
   </bean>
    -->
+   
+   <!-- 
   <bean id="datalistBaseFormFilter" abstract="true" parent="baseFormFilter">
      <property name="namespacePrefixResolver">
           <ref bean="namespaceService" />
@@ -42,7 +44,7 @@
          </set>
      </property>
   </bean>
-  
+   
   <bean id="datalistFormFilterNode" class="de.fme.alfresco.repo.form.DataListFormFilter" parent="datalistBaseFormFilter" >
   	<property name="filterRegistry" ref="nodeFilterRegistry" />  	
   </bean>
@@ -50,7 +52,7 @@
   <bean id="datalistFormFilterType" class="de.fme.alfresco.repo.form.DataListFormFilter" parent="datalistBaseFormFilter">
   	<property name="filterRegistry" ref="typeFilterRegistry" />
   </bean>
-  
+  -->
     <!--                                        --> 
     <!--      Slingshot Data List REST API      --> 
     <!--                                        --> 
