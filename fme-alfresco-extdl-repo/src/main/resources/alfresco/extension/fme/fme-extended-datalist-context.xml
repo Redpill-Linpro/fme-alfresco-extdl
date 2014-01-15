@@ -21,7 +21,7 @@
   </bean>
    -->
    
-   <!-- 
+   
   <bean id="datalistBaseFormFilter" abstract="true" parent="baseFormFilter">
      <property name="namespacePrefixResolver">
           <ref bean="namespaceService" />
@@ -52,7 +52,7 @@
   <bean id="datalistFormFilterType" class="de.fme.alfresco.repo.form.DataListFormFilter" parent="datalistBaseFormFilter">
   	<property name="filterRegistry" ref="typeFilterRegistry" />
   </bean>
-  -->
+  
     <!--                                        --> 
     <!--      Slingshot Data List REST API      --> 
     <!--                                        --> 

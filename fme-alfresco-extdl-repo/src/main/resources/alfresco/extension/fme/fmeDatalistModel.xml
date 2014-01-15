@@ -80,8 +80,8 @@
          <title>Data List parent type</title>
          <parent>cm:content</parent>
          <mandatory-aspects>
-            <aspect>cm:versionable</aspect>
-         	<aspect>fm:discussable</aspect>
+            <!-- <aspect>cm:versionable</aspect> 
+         	  <aspect>fm:discussable</aspect> --> 
          	<aspect>dl:dataListItemId</aspect>
          </mandatory-aspects>
       </type>

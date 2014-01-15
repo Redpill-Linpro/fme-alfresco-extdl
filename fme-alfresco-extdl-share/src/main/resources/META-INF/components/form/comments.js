@@ -85,6 +85,7 @@
        */
       onReady: function CommentList_onReady()
       { 
+    	  alert("onReady");
          var me = this;
          // YUI Paginator definition
          var paginator = new YAHOO.widget.Paginator(
@@ -124,7 +125,8 @@
       _loadCommentsList: function CommentList__loadCommentsList(startIndex)
       {
          // construct the url to call
-         var url = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/node/{nodeRef}/comments",
+         var url = YAHOO.lang.substitute(Alfresco.constants.PROXY_URI + "api/cstg/deviation/{nodeRef}/comments?reverse=true",
+        		
          {
             nodeRef: this.options.itemNodeRef.replace(":/", "")
          });
@@ -230,7 +232,7 @@
          
          // comment info and content
          html += '<div class="nodeContent"><div class="userLink">' + Alfresco.util.people.generateUserLink(data.author);
-         html += ' ('+Alfresco.util.formatDate(data.createdOn)+'):';
+         html += ' ('+Alfresco.util.formatDate(data.createdOn)+'), tilldelad till ' + data.commentAssignee + ':';
          html += '</div>';
          html += '<div class="content yuieditor">' + data.content + '</div>';
          html += '</div>';

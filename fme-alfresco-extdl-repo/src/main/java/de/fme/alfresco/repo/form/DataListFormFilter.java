@@ -65,7 +65,7 @@ public class DataListFormFilter<ItemType, PersistType> extends AbstractFilter<It
 
     @Override
     public void afterPersist(ItemType item, FormData data, PersistType persistedObject) {
-        LOGGER.debug("afterPersist");
+/*        LOGGER.debug("afterPersist");
         final NodeRef nodeRef;
         if (persistedObject instanceof NodeRef) {
             nodeRef = (NodeRef) persistedObject;
@@ -92,7 +92,7 @@ public class DataListFormFilter<ItemType, PersistType> extends AbstractFilter<It
                 }
             }
         }
-
+*/
     }
 
     @Override
