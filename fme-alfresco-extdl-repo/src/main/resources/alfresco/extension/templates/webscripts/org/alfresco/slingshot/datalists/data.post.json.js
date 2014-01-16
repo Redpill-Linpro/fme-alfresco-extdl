@@ -1,6 +1,7 @@
 <import resource="classpath:/alfresco/extension/templates/webscripts/org/alfresco/slingshot/datalists/deviations-evaluator.lib.js">
 <import resource="classpath:alfresco/extension/templates/webscripts/org/alfresco/slingshot/datalists/filters.lib.js">
 <import resource="classpath:alfresco/extension/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
+<import resource="classpath:alfresco/templates/webscripts/org/redpill/comments/comments.lib.js">
 
 const REQUEST_MAX = 1000;
 
@@ -36,6 +37,18 @@ function escape(value) {
    */
 }
 
+function hasUnreadComment(deviationNode) {
+	var comments = getComments(deviationNode);
+	var currentUserNodeRef = person.nodeRef;
+	for each(var comment in comments){
+		if (String(getCommentData(comment).commentAssigneeNodeRef.nodeRef.toString()) === String(currentUserNodeRef.toString())){
+			if (String(getCommentData(comment).commentReadByAssignee) == "false"){
+				return "true";
+			}
+		}
+	}
+	return "false";
+}
 
 /**
  * Main entry point: Return data list with properties being supplied in POSTed arguments
@@ -115,10 +128,13 @@ function getData()
             var evaledNode = Evaluator.run(node, fields);
             nodeChildren = node.children;
             extraInfo = null;
+            unreadComment = null;
             if (nodeChildren.length > 0) {
                for each (procNode in nodeChildren) {
                   if (procNode.type.indexOf("deviationProcessorNode", 0) != -1) {
                      evaledNode.extraInfo = procNode;
+                     evaledNode.unreadComment = hasUnreadComment(procNode);
+                     
                   }
                }
             }

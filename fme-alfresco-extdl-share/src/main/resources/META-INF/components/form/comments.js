@@ -85,7 +85,6 @@
        */
       onReady: function CommentList_onReady()
       { 
-    	  alert("onReady");
          var me = this;
          // YUI Paginator definition
          var paginator = new YAHOO.widget.Paginator(

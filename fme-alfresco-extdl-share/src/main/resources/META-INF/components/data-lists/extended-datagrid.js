@@ -172,6 +172,11 @@
                          			  if (data.value==true){
                          				  html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/padlock.gif" width="16" title="' + Alfresco.util.message("rpdl.classfiedDeviation") + '" />';
                          			  }
+                         			  
+                         			  // Use the classified column as container for icons, lets see if this user has any unread comments and if so, decorate it with icon.
+                         			  if (oRecord.getData("unreadComment")=="true"){
+                         				 html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/new-comment.png" width="16" title="' + Alfresco.util.message("rpdl.newComment") + '" />';
+                         			  }
                          		  }else {
                          			  html += $html(data.displayValue);  
                          		  }

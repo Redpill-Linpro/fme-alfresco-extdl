@@ -4,10 +4,14 @@
       <#assign node = item.node>
       <#assign tags><#list item.tags as tag>"${tag}"<#if tag_has_next>,</#if></#list></#assign>         
         <#if item.extraInfo??>
-          "nodeRef": "${item.extraInfo.nodeRef}",
+         "nodeRef": "${item.extraInfo.nodeRef}",
         <#else>
          "nodeRef": "${node.nodeRef}",
         </#if>
+        <#if item.unreadComment??>
+          "unreadComment": "${item.unreadComment}",
+        </#if>
+        
          "createdOn": "${xmldate(node.properties.created)}",
          "createdBy":
          {
