@@ -41,9 +41,11 @@ function hasUnreadComment(deviationNode) {
 	var comments = getComments(deviationNode);
 	var currentUserNodeRef = person.nodeRef;
 	for each(var comment in comments){
-		if (String(getCommentData(comment).commentAssigneeNodeRef.nodeRef.toString()) === String(currentUserNodeRef.toString())){
-			if (String(getCommentData(comment).commentReadByAssignee) == "false"){
-				return "true";
+		if (getCommentData(comment).commentAssigneeNodeRef != undefined && getCommentData(comment).commentAssigneeNodeRef.nodeRef != undefined){
+			if (String(getCommentData(comment).commentAssigneeNodeRef.nodeRef.toString()) === String(currentUserNodeRef.toString())){
+				if (String(getCommentData(comment).commentReadByAssignee) == "false"){
+					return "true";
+				}
 			}
 		}
 	}
@@ -100,6 +102,7 @@ function getData()
      
       var filterParams = Filters.getFilterParams(filter, parsedArgs)
          query = filterParams.query;
+      
       // Query the nodes - passing in default sort and result limit parameters
       if (query !== "")
       {
@@ -115,8 +118,36 @@ function getData()
             templates: filterParams.templates,
             namespace: (filterParams.namespace ? filterParams.namespace : null)
          });
+         
+         // Is there a handling officer set?
+         // Do second filtering (associations) which cannot be targeted in query
+        
+         if (allNodes != "undefined"){
+   	      if (allNodes.length > 0 && filterParams.handlingOfficer != null)
+   	      {
+   	    	  var allFilteredNodes = [];
+   	    	  for (var i = 0 ; i < allNodes.length; i++)
+   	    	  {
+   	    		  if(allNodes[i].assocs["rpdl:handlingOfficer"] != null)
+   	    		  {
+   	    			  var handlingOfficers = allNodes[i].assocs["rpdl:handlingOfficer"];
+   	    			  
+   	    			  for (var j = 0;j<handlingOfficers.length; j++){
+   	    				  if (handlingOfficers[j].name == filterParams.handlingOfficer.name){
+   	    					allFilteredNodes.push(allNodes[i]);
+   	    				  }else {
+   	    					  logger.log("inte match");
+   	    				  }
+   	    			  }
+   	    			  
+   	    		  }
+   	    	  }
+   	    	  allNodes = allFilteredNodes;
+   	      }
+
       }
       
+   }
    }
 
    if (allNodes.length > 0)

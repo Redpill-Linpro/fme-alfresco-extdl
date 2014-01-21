@@ -150,7 +150,63 @@ var Filters =
             }
             filterParams.query += "+PATH:\"/cm:taggable/cm:" + search.ISO9075Encode(filterData) + "/member\"";
             break;
+         // Deviations custom filters
+         case "myOngoingDeviations":
+             filterParams.limitResults = argMax;
 
+             filterQuery = "+PARENT:\"" + parsedArgs.nodeRef;
+             if (parsedArgs.nodeRef == "alfresco://sites/home")
+             {
+                // Special case for "Sites home" pseudo-nodeRef
+                filterQuery += "/*/cm:dataLists";
+             }
+             filterQuery += "\"";
+             
+             // since this is an association we need to filter out the 
+             // parts of the list we are not interested in later on
+             
+             filterParams.handlingOfficer = person;
+             filterQuery += " -@rpdl\\:status:\"" + "finished" + '"';
+             //filterQuery += " -TYPE:\"folder\"";
+             filterParams.query = filterQuery + filterQueryDefaults;
+             
+        	 break;
+         case "myClosedDeviations":
+             filterParams.limitResults = argMax;
+
+             filterQuery = "+PARENT:\"" + parsedArgs.nodeRef;
+             if (parsedArgs.nodeRef == "alfresco://sites/home")
+             {
+                // Special case for "Sites home" pseudo-nodeRef
+                filterQuery += "/*/cm:dataLists";
+             }
+             filterQuery += "\"";
+             
+             // since this is an association we need to filter out the 
+             // parts of the list we are not interested in later on
+             
+             filterParams.handlingOfficer = person;
+             filterQuery += " +@rpdl\\:status:\"" + "finished" + '"';
+             //filterQuery += " -TYPE:\"folder\"";
+             filterParams.query = filterQuery + filterQueryDefaults;
+             
+        	 break;
+         case "allMyDeviations":
+             filterParams.limitResults = argMax;
+
+             filterQuery = "+PARENT:\"" + parsedArgs.nodeRef;
+             if (parsedArgs.nodeRef == "alfresco://sites/home")
+             {
+                // Special case for "Sites home" pseudo-nodeRef
+                filterQuery += "/*/cm:dataLists";
+             }
+             filterQuery += "\"";
+             
+             // since this is an association we need to filter out the 
+             // parts of the list we are not interested in later on
+             filterParams.handlingOfficer = person;
+             filterParams.query = filterQuery + filterQueryDefaults;
+        	 break;        	 
          case "filterform":
          	//we have a filter form!
         	  	var filterData = filter.filterData;
