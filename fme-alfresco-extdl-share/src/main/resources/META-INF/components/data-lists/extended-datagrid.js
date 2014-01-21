@@ -209,12 +209,31 @@
       {
     	 Alfresco.component.ExtDataGrid.superclass.onReady.call(this);
          
+    	 // when calling with a nodeRef in #view, this will open the form.
+         if (window.location.hash && window.location.hash.indexOf("#view=") == 0) {
+             var hash = window.location.hash;
+             var nodeRef = hash.replace("#view=", "");
+
+             this.onActionView({
+                nodeRef: nodeRef
+             });
+          } else if (window.location.hash && window.location.hash.indexOf("#edit=") == 0) {
+             var hash = window.location.hash;
+             var nodeRef = hash.replace("#edit=", "");
+
+             this.onActionEdit({
+                nodeRef: nodeRef
+             });
+          }
+    	 
          // FilterForm Submit button
          this.widgets.filterFormSubmit = Alfresco.util.createYUIButton(this, "filterform-submit", this.onFilterFormSubmit);
          // FilterForm Save button..not yet
          //this.widgets.filterFormSave = Alfresco.util.createYUIButton(this, "filterform-save", this.onFilterFormSave);
          
          Alfresco.util.createTwister(this.id+"-filterHeader", "datalistformfilter");
+         
+        
       },
    	  
 	  /**
