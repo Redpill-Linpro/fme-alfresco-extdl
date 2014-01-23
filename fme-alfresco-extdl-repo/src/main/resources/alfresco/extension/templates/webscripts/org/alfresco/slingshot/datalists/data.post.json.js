@@ -52,6 +52,16 @@ function hasUnreadComment(deviationNode) {
 	return "false";
 }
 
+function getNoOfAttachments(deviationNode) {
+	var children = deviationNode.childAssocs["rpdl:attachments"];
+	
+	if (children == null || children.length == 0){
+		return 0;
+	}else{
+		return children.length;
+	}
+}
+
 /**
  * Main entry point: Return data list with properties being supplied in POSTed arguments
  *
@@ -160,12 +170,13 @@ function getData()
             nodeChildren = node.children;
             extraInfo = null;
             unreadComment = null;
+            numberOfAttachments = null;
             if (nodeChildren.length > 0) {
                for each (procNode in nodeChildren) {
                   if (procNode.type.indexOf("deviationProcessorNode", 0) != -1) {
                      evaledNode.extraInfo = procNode;
                      evaledNode.unreadComment = hasUnreadComment(procNode);
-                     
+                     evaledNode.numberOfAttachments = getNoOfAttachments(procNode); 
                   }
                }
             }

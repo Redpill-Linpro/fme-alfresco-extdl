@@ -11,6 +11,9 @@
         <#if item.unreadComment??>
           "unreadComment": "${item.unreadComment}",
         </#if>
+        <#if item.numberOfAttachments??>
+          "numberOfAttachments": "${item.numberOfAttachments}",
+        </#if>
         
          "createdOn": "${xmldate(node.properties.created)}",
          "createdBy":

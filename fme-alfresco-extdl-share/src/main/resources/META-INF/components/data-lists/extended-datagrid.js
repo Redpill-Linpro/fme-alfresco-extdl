@@ -177,6 +177,12 @@
                          			  if (oRecord.getData("unreadComment")=="true"){
                          				 html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/new-comment.png" width="16" title="' + Alfresco.util.message("rpdl.newComment") + '" />';
                          			  }
+
+                         			  // Use the classified column as container for icons, lets see if this deviation have any attached files
+                         			  if (oRecord.getData("numberOfAttachments") > 0){
+                         				 html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/paper-clip-16.png" width="16" title="' + Alfresco.util.message("rpdl.noOfAttachments", this.name, oRecord.getData("numberOfAttachments")) + '" />';
+                         			  }
+                         			  
                          		  }else {
                          			  html += $html(data.displayValue);  
                          		  }
