@@ -186,14 +186,18 @@ var Evaluator =
        * PERMISSIONS
        */
       // Deviations customisation. Make sure read-permission is propagated to the webscript
-      nodeChildren = node.children;
       var readPerm = false;
-      if (nodeChildren.length > 0) {
-         for each (procNode in nodeChildren) {
-            if (procNode.type.indexOf("deviationProcessorNode", 0) != -1) {
-         	   readPerm = procNode.hasPermission("Read")
-            }
-         }
+      if (node.type.indexOf("deviationReportNode", 0) != -1) {
+	      nodeChildren = node.children;
+	      if (nodeChildren.length > 0) {
+	         for each (procNode in nodeChildren) {
+	            if (procNode.type.indexOf("deviationProcessorNode", 0) != -1) {
+	         	   readPerm = procNode.hasPermission("Read");
+	            }
+	         }
+	      }
+      } else {
+    	  readPerm = node.hasPermission("Read");
       }
 
       permissions =
