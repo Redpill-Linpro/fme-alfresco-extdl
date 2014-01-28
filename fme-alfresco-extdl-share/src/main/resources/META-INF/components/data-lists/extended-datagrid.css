@@ -10,3 +10,8 @@
 .datagrid .form-container .form-buttons {
     padding-top: 0em;
 }
+
+.datagrid .onActionPdf a
+{
+   background-image: url(../images/export-pdf-16.png);
+}

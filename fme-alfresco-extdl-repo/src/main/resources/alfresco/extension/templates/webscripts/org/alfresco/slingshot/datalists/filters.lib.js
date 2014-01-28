@@ -47,7 +47,7 @@ var Filters =
          limitResults: null,
          sort: [
          {
-            column: "dl:dataListItemId",
+            column: "dl:itemId",
             ascending: false
          }],
          language: "lucene",

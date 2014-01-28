@@ -45,17 +45,22 @@
 	       */
 	      onReady: function DataListToolbar_onReady()
 	      {
+	    	 Alfresco.component.ExtDataListToolbar.superclass.onReady.call(this);
 	         this.widgets.exportCsvButton = Alfresco.util.createYUIButton(this, "exportCsvButton", this.onExportCsv,
 	         {
 	            disabled: true
 	         });
-	         Alfresco.component.ExtDataListToolbar.superclass.onReady.call(this);
+
+	         // Try to disable the new button...
+	         //Alfresco.util.ComponentManager.findFirst("Alfresco.component.DataListToolbar").widgets.newRowButton.disabled=true;
+	         
+	         
 	      },
 	      
 	      /**
 	       * Export CSV button click handler
 	       *
-	       * @method onNewRow
+	       * @method onExportCsv
 	       * @param e {object} DomEvent
 	       * @param p_obj {object} Object passed back from addListener method
 	       */
@@ -64,6 +69,26 @@
 	    	   var nodeRef = Alfresco.util.NodeRef(this.modules.dataGrid.datalistMeta.nodeRef)
 	    	   window.location.href = Alfresco.constants.PROXY_URI + "/fme/slingshot/datalists/list/node/"+nodeRef.uri +"?format=xlsx";
 	    	   
+	      },
+
+	      /**
+	       * Export PDF button click handler
+	       *
+	       * @method onExportPdf
+	       * @param e {object} DomEvent
+	       * @param p_obj {object} Object passed back from addListener method
+	       */
+	      onExportPdf: function ExtDataListToolbar_onExportPdf(e, p_obj)
+	      {
+	    	  // Collect dlItemIds to operate on.
+	    	  var dlItemIds = [];
+	    	   for (var i=0, j = e.length; i < j; i++){
+	    		   var row = e[i];
+	    		   dlItemIds.push(row.itemData.prop_dl_itemId.value);
+	    	   }
+	    	   
+	    	   window.location = Alfresco.constants.PROXY_URI + "api/cstg/deviation/pdf-deviations?dlItemIds=" + dlItemIds;
+	    	  
 	      },
 
 	      /**

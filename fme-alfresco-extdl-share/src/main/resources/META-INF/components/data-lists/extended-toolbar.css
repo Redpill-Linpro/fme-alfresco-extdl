@@ -3,3 +3,15 @@
    background: url(../images/datalist-export-16.png) no-repeat 12px 4px;
    padding-left: 24px;
 }
+
+.datalist-toolbar .export-pdf span.first-child
+{
+   background: url(../images/datalist-export-16.png) no-repeat 12px 4px;
+   padding-left: 24px;
+}
+
+.toolbar .onExportPdf
+{
+   background-image: url(../images/export-pdf-16.png);
+}
+

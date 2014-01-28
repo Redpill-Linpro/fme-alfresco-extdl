@@ -372,6 +372,15 @@
          }).show();
       },
       
+      onActionPdf: function DataGrid_onActionPdf(item)
+      {
+    	  // Put this itemId in array for webscript to handle (same script as in toolbar call)
+    	  var dlItemIds = [];
+          dlItemIds.push(item.itemData.prop_dl_itemId.value);
+    	  
+    	  window.location = Alfresco.constants.PROXY_URI + "api/cstg/deviation/pdf-deviations?dlItemIds=" + dlItemIds;
+      },
+      
       /**
        * DataTable set-up and event registration
        *

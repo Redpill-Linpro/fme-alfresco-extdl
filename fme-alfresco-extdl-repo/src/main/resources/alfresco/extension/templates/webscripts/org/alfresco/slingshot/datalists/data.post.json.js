@@ -102,7 +102,7 @@ function getData()
       var parentNode = parsedArgs.listNode;
       if (parentNode != null)
       {
-         var pagedResult = parentNode.childFileFolders(true, false, Filters.IGNORED_TYPES, -1, -1, REQUEST_MAX, "dl:dataListItemId", false, null);
+         var pagedResult = parentNode.childFileFolders(true, false, Filters.IGNORED_TYPES, -1, -1, REQUEST_MAX, "dl:itemId", false, null);
          allNodes = pagedResult.page;
       }
    }
