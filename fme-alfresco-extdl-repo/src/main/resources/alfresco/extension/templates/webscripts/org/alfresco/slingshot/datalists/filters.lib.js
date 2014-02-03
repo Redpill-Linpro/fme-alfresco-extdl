@@ -239,7 +239,7 @@ var Filters =
              			}
  	            		
  	            	}
- 	            	else if (luceneFieldName.indexOf("Priority") > 0 || luceneFieldName.indexOf("Status") > 0){
+ 	            	else if (luceneFieldName.indexOf("Priority") > 0 || luceneFieldName.indexOf("Status") > 0 || luceneFieldName.indexOf("status") > 0){
              			var values = value.split(",");
              			if (values.length > 1){
              				filterQuery += " +(";
@@ -253,6 +253,9 @@ var Filters =
              			}else{
              				filterQuery += " +@"+ luceneFieldName +":\"" +  value + '"';
              			}
+ 	            	}else if (fieldName.indexOf("itemId") > 0) {
+ 	            		// No wildcards on this numeric field.
+ 	            		filterQuery += " +@"+ luceneFieldName +":\"" +  value + '"';
  	            	}
  	            	else{
  	            		filterQuery += " +@"+ luceneFieldName +":\"*" +  value + '*"';
