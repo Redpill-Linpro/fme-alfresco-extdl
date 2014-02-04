@@ -39,10 +39,10 @@ function escape(value) {
 
 function hasUnreadComment(deviationNode) {
 	var comments = getComments(deviationNode);
-	var currentUserNodeRef = person.nodeRef;
+	var currentUserName = person.properties.userName;
 	for each(var comment in comments){
-		if (getCommentData(comment).commentAssigneeNodeRef != undefined && getCommentData(comment).commentAssigneeNodeRef.nodeRef != undefined){
-			if (String(getCommentData(comment).commentAssigneeNodeRef.nodeRef.toString()) === String(currentUserNodeRef.toString())){
+		if (getCommentData(comment).commentAssignedTo != undefined){
+			if (String(getCommentData(comment).commentAssignedTo) === currentUserName){
 				if (String(getCommentData(comment).commentReadByAssignee) == "false"){
 					return "true";
 				}
