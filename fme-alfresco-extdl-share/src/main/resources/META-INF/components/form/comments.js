@@ -231,7 +231,12 @@
          
          // comment info and content
          html += '<div class="nodeContent"><div class="userLink">' + Alfresco.util.people.generateUserLink(data.author);
-         html += ' ('+Alfresco.util.formatDate(data.createdOn)+'), tilldelad till ' + data.commentAssignee + ':';
+         html += ' ('+Alfresco.util.formatDate(data.createdOn)+'), ';
+         if (data.commentAssignee !== ""){
+        	 html += 'tilldelad till ' + data.commentAssignee + ':';
+         }else{
+        	 html += 'utan tilldelning.';
+         }
          html += '</div>';
          html += '<div class="content yuieditor">' + data.content + '</div>';
          html += '</div>';
