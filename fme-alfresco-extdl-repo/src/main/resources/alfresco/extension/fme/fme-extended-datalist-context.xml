@@ -97,6 +97,9 @@
               <entry key="dl:eventAgenda"> 
                 <value>dl:itemId,dl:eventAgendaRef,dl:eventAgendaStartTime,dl:eventAgendaEndTime,dl:eventAgendaSessionName,dl:eventAgendaPresenter,dl:eventAgendaAudience,cm:attachments,dl:eventAgendaNotes,fm:forum</value> 
               </entry> 
+              <entry key="rpdl:deviationReportNode"> 
+                <value>dl:itemId,rpdl:incidentDate,rpdl:reporter,rpdl:incident,rpdl:handlingOfficer,rpdl:reminder</value> 
+              </entry> 
            </map> 
         </property> 
     </bean>
